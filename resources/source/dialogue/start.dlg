@@ -1,0 +1,6 @@
+@include next.dlg
+@namespace start
+
+{opening
+Hey, you there?${wait(5)}
+}

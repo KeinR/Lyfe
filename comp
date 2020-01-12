@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+java net.keinr.lyfe.sdk.Main resources/dialogue/manifest.mf --out ../bin/dialogue.dat

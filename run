@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source .conf
+java --module-path $PATH_TO_FX --add-modules $FXMODS net.keinr.lyfe.Main
