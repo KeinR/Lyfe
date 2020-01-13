@@ -1,8 +1,16 @@
 package net.keinr.lyfe;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import java.util.Random;
+
+import net.keinr.util.Debug;
 
 import static net.keinr.util.Ansi.RED;
 import static net.keinr.util.Ansi.YELLOW;
@@ -10,32 +18,62 @@ import static net.keinr.util.Ansi.GREEN;
 import static net.keinr.util.Ansi.RESET;
 
 class Logger {
+    private static final boolean DEBUG_ENABLED = true;
+
+    private static final Debug dLog = new Debug("^net\\.keinr\\.lyfe\\.", "debug", DEBUG_ENABLED);
     private static final Random random = new Random();
+    private static final PrintStream fLog;
 
-    static void log(String message) {
-
+    static {
+        try {
+            fLogProto = new PrintStream(
+                new BufferedOutputStream(
+                    new FileOutputStream("lyfe.log", true)
+                ),
+                true
+            )
+        } catch (IOException e) {
+            System.out.println("["+RED+"ERROR"+RESET+"] Was unable to set up log file");
+            logTrace(e);
+        }
     }
 
-    static int logTrace(Throwable t) {
-        final int errId = random.nextInt(1000000000);
-        System.err.println("\n"+getTimestamp()+" <"+errId+">\n");
+    static void logDebug(Object message) {
+        dLog.logRouted(message, 1);
+    }
+
+    static void log(String message) {
+        fLog.println("["+getTimestamp()+"] "+message);
+    }
+
+    static void logTrace(Throwable t) {
+        System.err.println("\n"+getTimestamp()+"\n");
         e.printStackTrace();
-        return errId;
     }
 
     static void logTraceMessage(String message, Throwable t) {
         final int errId = random.nextInt(1000000000);
         System.err.println("\n"+getTimestamp()+" <"+errId+">\n");
         e.printStackTrace();
+        fLog.println("["+getTimestamp()+"] <"+errId+"> "+message);
     }
 
     static void error(String message, Throwable e) {
-        System.out.println("["+RED+"ERROR"+RESET+"] "+message+"\nPrinting stack trace....");
-        e.printStackTrace();
+        System.out.println("["+RED+"ERROR"+RESET+"] "+message+": "+e);
+        logTrace(message, e);
+        System.exit(1);
+    }
+
+    /** TODO consider renaming this to "die" so as to be more explicit as to it's function */
+    static void error(String message) {
+        System.out.println("["+RED+"ERROR"+RESET+"] "+message);
+        log(message);
+        System.exit(1);
     }
 
     static void warn(String message) {
         System.out.println("["+YELLOW+"WARNING"+RESET+"] "+message);
+        log(message);
     }
 
     /*ATM not used
