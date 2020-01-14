@@ -1,9 +1,5 @@
 package net.keinr.lyfe;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.BufferedOutputStream;
@@ -17,12 +13,11 @@ import net.keinr.util.config.PropertiesSyntaxException;
 import static net.keinr.util.Ansi.RED;
 import static net.keinr.util.Ansi.RESET;
 
-public class Main extends Application {
+public class Main {
 
     private static final Random random = new Random();
 
-    @Override
-    public void start(Stage stage) {
+    public static void main(String[] args) {
 
         try {
             System.setErr(
@@ -54,10 +49,9 @@ public class Main extends Application {
         }
         random.setSeed(seed);
 
-        new Thread(Program::start, "Main").start();
+        Program.start();
     }
 
-    Random getRandom() { return random; }
+    static Random getRandom() { return random; }
 
-    public static void main(String[] args) { launch(args); }
 }

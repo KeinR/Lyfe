@@ -25,8 +25,9 @@ class Logger {
     private static final PrintStream fLog;
 
     static {
+        PrintStream ASN_fLog = null;
         try {
-            fLog = new PrintStream(
+            ASN_fLog = new PrintStream(
                 new BufferedOutputStream(
                     new FileOutputStream("lyfe.log", true)
                 ),
@@ -36,6 +37,7 @@ class Logger {
             System.out.println("["+RED+"ERROR"+RESET+"] Was unable to set up log file");
             logTrace(e);
         }
+        fLog = ASN_fLog;
     }
 
     static void logDebug(Object message) {

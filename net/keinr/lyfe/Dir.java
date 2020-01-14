@@ -5,16 +5,16 @@ import java.util.Map;
 class Dir extends LFile {
     private final String fullPath;
     private final Dir parent;
-    private final Map<LFile> files;
-    Dir(Dir parent, Map<LFile> files, String name, LocalSystem system, short permissions) {
+    private final Map<String, LFile> files;
+    Dir(Dir parent, Map<String, LFile> files, String name, LocalSystem system, short permissions) {
         super(name, system, permissions);
         this.files = files;
         this.parent = parent;
         if (parent != null) {
             if (parent.getParent() != null) {
-                this.fullPath = parent.getPath()+"/"+this.name;
+                this.fullPath = parent.getPath()+"/"+this.getName();
             } else {
-                this.fullPath = "/"+this.name;
+                this.fullPath = "/"+this.getName();
             }
         } else {
             this.fullPath = "~";
@@ -24,6 +24,14 @@ class Dir extends LFile {
     Dir getParent() { return parent; }
     String getPath() { return fullPath; }
     LFile getChild(String name) { return files.get(name); }
+
+    void addChild(LFile file) {
+        if (!files.containsKey(file.getName())) {
+            files.put(file.getName(), file);
+        } else {
+            // Err: file of that name already exists in the directory
+        }
+    }
 
     @Override
     public void write(byte[] data) {

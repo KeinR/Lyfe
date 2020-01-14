@@ -1,5 +1,8 @@
 package net.keinr.lyfe;
 
+import java.util.Map;
+import java.util.HashMap;
+
 abstract class LFile {
 
     private String name;
@@ -49,7 +52,7 @@ abstract class LFile {
     }
 
     String getName() { return name; }
-    void setName(String name) { return this.name = name; }
+    void setName(String name) { this.name = name; }
 
     LocalSystem getSystem() { return system; }
 

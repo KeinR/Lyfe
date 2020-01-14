@@ -22,7 +22,7 @@ class User {
     }
     String getPassword() { return password; }
     String getUsername() { return username; }
-    String getSystem() { return system; }
+    LocalSystem getSystem() { return system; }
     int getToken() { return token; }
     boolean isAdmin() { return admin; }
 

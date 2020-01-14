@@ -8,8 +8,8 @@ class DataFile extends LFile {
     }
 
     @Override
-    void write(String data) {
-        this.content = data.getBytes();
+    void write(byte[] data) {
+        this.content = data;
     }
 
     @Override

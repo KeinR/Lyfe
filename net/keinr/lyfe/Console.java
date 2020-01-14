@@ -8,11 +8,11 @@ class Console {
     private static User currentUser;
     private static Dir currentDirectory;
 
-    private static boolean hasSetup = false;
+    private static boolean started = false;
 
-    static void setup(User user) {
-        if (hasSetup) Logger.error("Tried to init Console more than once");
-        hasSetup = true;
+    static void start(User user) {
+        if (started) Logger.error("Tried to start Console more than once");
+        started = true;
         currentDirectory = user.getSystem().getHomeDir();
         new Thread(Console::in, "Input").start();
     }
@@ -32,11 +32,12 @@ class Console {
     }
 
     static void printPrompt() {
-        System.out.println(GREEN+currentUser.getName()+"@"+currentUser.getSystem().getName()+RESET+" "+YELLOW+currentDirectory.getPath()+RESET);
+        System.out.println(GREEN+currentUser.getUsername()+"@"+currentUser.getSystem().getName()+RESET+" "+YELLOW+currentDirectory.getPath()+RESET);
         System.out.print("$ ");
     }
 
     private static void in() {
+        final byte[] buffer = new byte[500]; // I think that 500 bytes is more than necessary for cli input
         while (true) {
             // TODO: Read user input
         }

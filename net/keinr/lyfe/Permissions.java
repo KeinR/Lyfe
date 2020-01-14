@@ -27,6 +27,7 @@ class Permissions {
         return ofIndex(permissionIndex) || ofIndex(FULL_CONTROL);
     }
 
+    void set(int value) { set((byte)value); }
     void set(byte value) {
         assert value <= 31 && value >= 0 : "Permissions range out of bounds";
         this.perms = value;
