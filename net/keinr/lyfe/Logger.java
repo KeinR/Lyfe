@@ -26,12 +26,12 @@ class Logger {
 
     static {
         try {
-            fLogProto = new PrintStream(
+            fLog = new PrintStream(
                 new BufferedOutputStream(
                     new FileOutputStream("lyfe.log", true)
                 ),
                 true
-            )
+            );
         } catch (IOException e) {
             System.out.println("["+RED+"ERROR"+RESET+"] Was unable to set up log file");
             logTrace(e);
@@ -46,12 +46,12 @@ class Logger {
         fLog.println("["+getTimestamp()+"] "+message);
     }
 
-    static void logTrace(Throwable t) {
+    static void logTrace(Throwable e) {
         System.err.println("\n"+getTimestamp()+"\n");
         e.printStackTrace();
     }
 
-    static void logTraceMessage(String message, Throwable t) {
+    static void logTraceMessage(String message, Throwable e) {
         final int errId = random.nextInt(1000000000);
         System.err.println("\n"+getTimestamp()+" <"+errId+">\n");
         e.printStackTrace();
@@ -60,7 +60,7 @@ class Logger {
 
     static void error(String message, Throwable e) {
         System.out.println("["+RED+"ERROR"+RESET+"] "+message+": "+e);
-        logTrace(message, e);
+        logTraceMessage(message, e);
         System.exit(1);
     }
 

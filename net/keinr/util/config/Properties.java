@@ -57,7 +57,7 @@ public class Properties {
      * @throws NumberFormatException if the property isn't a long
      * @return property long value
      */
-    public int getLong(String tag, String name) throws PropertyNFException {
+    public long getLong(String tag, String name) throws PropertyNFException {
         return Long.parseLong(getString(tag, name));
     }
 

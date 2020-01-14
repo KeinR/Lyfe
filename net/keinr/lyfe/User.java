@@ -10,8 +10,10 @@ class User {
     private final String username;
     private final int token;
     private String password;
-    User(LocalSystem system, String username, String password) {
+    private boolean admin;
+    User(LocalSystem system, boolean admin, String username, String password) {
         this.system = system;
+        this.admin = admin;
         this.username = username;
         this.password = password;
         this.token = Main.getRandom().nextInt();
@@ -22,6 +24,7 @@ class User {
     String getUsername() { return username; }
     String getSystem() { return system; }
     int getToken() { return token; }
+    boolean isAdmin() { return admin; }
 
     void setPassword(String password) { this.password = password; }
 

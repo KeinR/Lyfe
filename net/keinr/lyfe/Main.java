@@ -40,13 +40,13 @@ public class Main extends Application {
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Logger.logTrace(e);
-            Logger.error(e.getName()+": "+e);
+            Logger.error(t.getName()+": "+e);
         });
 
         long seed = random.nextLong();
         try {
             final Properties properties = Properties.load("resources/launch.ini");
-            seed = properties.readLongSafe("default", "seed", seed);
+            seed = properties.getLongSafe("default", "seed", seed);
         } catch (IOException e) {
             Logger.warn("Could not load launch.ini: "+e);
         } catch (PropertiesSyntaxException e) {

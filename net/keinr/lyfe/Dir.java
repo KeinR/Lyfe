@@ -3,11 +3,11 @@ package net.keinr.lyfe;
 import java.util.Map;
 
 class Dir extends LFile {
-    private final String name, fullPath;
+    private final String fullPath;
     private final Dir parent;
     private final Map<LFile> files;
-    Dir(Dir parent, String name, Map<LFile> files) {
-        this.name = name;
+    Dir(Dir parent, Map<LFile> files, String name, LocalSystem system, short permissions) {
+        super(name, system, permissions);
         this.files = files;
         this.parent = parent;
         if (parent != null) {
@@ -26,10 +26,22 @@ class Dir extends LFile {
     LFile getChild(String name) { return files.get(name); }
 
     @Override
-    public String getName() { return name; }
+    public void write(byte[] data) {
+        // Err: cannot write to directory
+    }
 
     @Override
-    public void open() {
-        
+    public byte[] read() {
+        // Err: cannot read from directory
+        // ....
+        // Or perhaps open the dir
+        return null;
+    }
+
+    @Override
+    public void execute() {
+        // Err: cannot execute directory
+        // ....
+        // Or perhaps open the dir
     }
 }

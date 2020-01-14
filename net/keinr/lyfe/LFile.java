@@ -1,30 +1,37 @@
 package net.keinr.lyfe;
 
-class LFile {
+abstract class LFile {
 
-    private byte[] raw;
     private String name;
     private final LocalSystem system;
 
-    private final Permissions everyone; // Literally everyone
-    private final Permissions users; // Registered users on the local system
-    private final Permissions administrator; // Registered admin users on the local system
+    private final Permissions everyone = new Permissions(); // Literally everyone
+    private final Permissions users = new Permissions(); // Registered users on the local system
+    private final Permissions administrator = new Permissions(); // Registered admin users on the local system
     private final Map<Integer, Permissions> userPermissions = new HashMap<Integer, Permissions>(); // User-specific permissions
 
-    LFile(byte[] raw, String name, LocalSystem system, byte everyonePerms, byte userPerms, byte administratorPerms) {
-        this.raw = raw;
+    LFile(String name, LocalSystem system, short permissions) {
         this.name = name;
         this.system = system;
-        this.everyone = new Permissions(everyonePerms);
-        this.users = new Permissions(userPerms);
-        this.administrator = new Permissions(administratorPerms);
+        setPerms(permissions);
     }
 
-    void setToken(int token, Permissions perms) {
+    void setPerms(short permissions) {
+        assert permissions >= 0 : "Invalid range for permissions";
+        // First set is everyone, then users, and finally, administrator
+        this.everyone.set(
+           (permissions >> Permissions.NUMBER_PERMISSIONS * 2) & Permissions.NUMBER_PERMISSIONS);
+        this.users.set(
+            (permissions >> Permissions.NUMBER_PERMISSIONS) & Permissions.NUMBER_PERMISSIONS);
+        this.administrator.set(
+            permissions & Permissions.NUMBER_PERMISSIONS);
+    }
+
+    void setToken(int token, byte perms) {
         if (userPermissions.containsKey(token)) {
-            userPermissions.replace(token, perms);
+            userPermissions.replace(token, new Permissions(perms));
         } else {
-            userPermissions.put(token, perms);
+            userPermissions.put(token, new Permissions(perms));
         }
     }
 
@@ -44,11 +51,9 @@ class LFile {
     String getName() { return name; }
     void setName(String name) { return this.name = name; }
 
-    byte[] getRaw() { return raw; }
-    void write(String data) { this.raw = data.getBytes(); }
+    LocalSystem getSystem() { return system; }
 
-    /** Yes- you can execute anything- granted, with varying results. */
-    void execute() {
-        system.execute(raw);
-    }
+    abstract byte[] read();
+    abstract void write(byte[] data);
+    abstract void execute();
 }
