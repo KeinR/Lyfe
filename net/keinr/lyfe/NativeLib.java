@@ -1,9 +1,7 @@
 package net.keinr.lyfe;
 
 import com.sun.jna.Library;
-import com.sun.jna.Native;
 
-public interface NativeLib extends Library {
-    NativeLib INSTANCE = (NativeLib) Native.loadLibrary("test", NativeLib.class);
+interface NativeLib extends Library {
     int test(int arg);
 }

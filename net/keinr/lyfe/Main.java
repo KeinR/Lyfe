@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 
 import java.util.Random;
 
+import com.sun.jna.Native;
+
 import net.keinr.util.config.Properties;
 import net.keinr.util.config.PropertiesSyntaxException;
 
@@ -19,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        NativeLib lib = NativeLib.INSTANCE;
+        NativeLib lib = (NativeLib) Native.loadLibrary("test", NativeLib.class);
         System.out.println("YES -> "+lib.test(33));
 
         try {
