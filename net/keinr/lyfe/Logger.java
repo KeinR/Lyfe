@@ -77,6 +77,10 @@ class Logger {
         System.out.println("["+YELLOW+"WARNING"+RESET+"] "+message);
         log(message);
     }
+    static void warn(String message, Throwable e) {
+        System.out.println("["+YELLOW+"WARNING"+RESET+"] "+message);
+        logTraceMessage(message, e);
+    }
 
     /*ATM not used
     static void info(String message) {
