@@ -45,6 +45,7 @@ class User {
         return users.containsKey(username);
     }
 
+    /*
     static void serialize() {
 
         final ByteStreamWriter stream = new ByteStreamWriter();
@@ -69,4 +70,5 @@ class User {
             Logger.warn("Was unable to serialize user data to disk", e);
         }
     }
+    */
 }

@@ -2,6 +2,7 @@ package net.keinr.util.serial;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Provides methods for serializing numbers and strings
@@ -63,7 +64,7 @@ public class ByteStreamWriter {
      * @param val the int value
      */
     public void writeInt(int val) {
-        source.addAll(doWriteInt(source.size(), val));
+        source.addAll(val, doWriteInt(val));
     }
     /**
      * Write a int value to the stream at a certain index (4 bytes)
@@ -71,41 +72,55 @@ public class ByteStreamWriter {
      * @param val the int value
      */
     public void writeInt(int index, int val) {
-        source.addAll(doWriteInt(source.size(), val));
+        source.addAll(doWriteInt(val));
     }
     /**
      * Serailize an int value
      * @param val the int value
      */
-    public void doWriteInt(int val) {
+    public List<Byte> doWriteInt(int val) {
         final Byte[] buffer = new Byte[4];
         buffer[0] = (byte)(val >>> 24);
         buffer[1] = (byte)(val >>> 16);
         buffer[2] = (byte)(val >>> 8);
         buffer[3] = (byte)val;
+        return Arrays.asList(buffer);
     }
 
     /**
      * Write a short value to the stream (2 bytes)
      * @param val the short value
      */
-    public void writeShort(short val) { writeShort(source.size(), val); }
+    public void writeShort(short val) {
+        source.addAll(doWriteShort(val));
+    }
+    /**
+     * Write a short value to the stream at a specific index (2 bytes)
+     * @param index insetion index
+     * @param val the short value
+     */
+    public void writeShort(int index, short val) {
+        source.addAll(index, doWriteShort(val));
+    }
     /**
      * Insert a short value to the stream at a specific index (2 bytes)
      * @param index insertion index
      * @param val the short value
      */
-    public void writeShort(int index, short val) {
+    public List<Byte> doWriteShort(short val) {
         final Byte[] buffer = new Byte[2];
         buffer[0] = (byte)(val >>> 8);
-        source.add(index, (byte)val);
+        buffer[0] = (byte)val;
+        return Arrays.asList(buffer);
     }
 
     /**
      * Write a byte value to the stream (1 byte)
      * @param val the byte value
      */
-    public void writeByte(byte val) { writeByte(source.size(), val); }
+    public void writeByte(byte val) {
+        source.add(val);
+    }
     /**
      * Insert a byte value to a specific index in the stream stream (1 byte)
      * @param index the index to write at
@@ -115,13 +130,7 @@ public class ByteStreamWriter {
         source.add(index, val);
     }
 
-    /**
-     * Write a String to the stream.
-     * Will also write an integer that records the length of
-     * the string for when it's deserialized
-     * @param string the String to write
-     */
-    public void writeString(String string) { writeString(source.size(), string); }
+
     /**
      * Write a String to the stream.
      * Will also write an integer that records the length of

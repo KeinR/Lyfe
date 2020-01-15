@@ -19,6 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
 
+        NativeLib lib = NativeLib.INSTANCE;
+        System.out.println("YES -> "+lib.test(33));
+
         try {
             System.setErr(
                 new PrintStream(
