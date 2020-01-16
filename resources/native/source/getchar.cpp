@@ -1,10 +1,12 @@
 // #ifndef INPUT__HPP
 // #define INPUT__HPP
 
-#include <iostream>
-#include <unistd.h>
-#include <termios.h>
-#include <thread>
+// #include <iostream>
+// #include <unistd.h>
+// #include <termios.h>
+// #include <thread>
+
+// #include <string>
 
 #include "getchar.hpp"
 
@@ -32,8 +34,10 @@ int getch(void) {
 }
 */
 
-extern "C" __declspec(dllexport) void speak() {
-    std::cout << "Hi am cpluzppluz" << std::endl;
+extern int __cdecl speak() {
+    // std::cout << "Hi am cpluzppluz" << std::endl;
+    int val = 2;
+    return val;
 }
 
 // #endif

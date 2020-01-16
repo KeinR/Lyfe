@@ -24,8 +24,8 @@ public class Main {
         NativeLib lib = (NativeLib) Native.loadLibrary("getchar2", NativeLib.class);
         System.out.println("Running getch....");
         // System.out.println("YES -> "+lib.getch());
-        lib.speak();
-        System.out.println("Done.");
+        // lib.speak();
+        System.out.println("Done, "+lib.speak());
 
         try {
             System.setErr(
