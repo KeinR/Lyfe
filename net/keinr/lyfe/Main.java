@@ -21,8 +21,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        NativeLib lib = (NativeLib) Native.loadLibrary("test", NativeLib.class);
-        System.out.println("YES -> "+lib.test(33));
+        NativeLib lib = (NativeLib) Native.loadLibrary("getchar2", NativeLib.class);
+        System.out.println("Running getch....");
+        // System.out.println("YES -> "+lib.getch());
+        lib.speak();
+        System.out.println("Done.");
 
         try {
             System.setErr(
