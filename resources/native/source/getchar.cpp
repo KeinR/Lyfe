@@ -1,7 +1,7 @@
 // #ifndef INPUT__HPP
 // #define INPUT__HPP
 
-// #include <iostream>
+#include <iostream>
 // #include <unistd.h>
 // #include <termios.h>
 // #include <thread>
@@ -35,9 +35,10 @@ int getch(void) {
 */
 
 extern int __cdecl speak() {
-    // std::cout << "Hi am cpluzppluz" << std::endl;
-    int val = 2;
-    return val;
+    std::cout << "Hi am cpluzppluz" << std::endl;
+    fflush(stdout);
+    // int val = 2;
+    return 1;
 }
 
 // #endif

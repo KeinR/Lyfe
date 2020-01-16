@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+g++ -c getchar.cpp -o getchar2.o
+
+g++ -shared -o getchar2.dll getchar2.o
