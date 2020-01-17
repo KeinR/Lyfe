@@ -1,18 +1,16 @@
 // #ifndef INPUT__HPP
 // #define INPUT__HPP
 
-#include <iostream>
-// #include <unistd.h>
-// #include <termios.h>
-// #include <thread>
+// #include <iostream>
 
-// #include <string>
+#include <unistd.h>
+#include <termios.h>
+#include <thread>
 
 #include "getchar.hpp"
 
-/*
-__declspec(dllexport)
-int getch(void) {
+
+extern int __cdecl getch() {
    char buf = 0;
    struct termios old = {0};
    fflush(stdout);
@@ -32,11 +30,11 @@ int getch(void) {
        perror("tcsetattr ~ICANON");
    return buf;
 }
-*/
+
 
 extern int __cdecl speak() {
-    std::cout << "Hi am cpluzppluz" << std::endl;
-    fflush(stdout);
+    // char foo[500];
+    // std::cin >> foo;
     // int val = 2;
     return 1;
 }

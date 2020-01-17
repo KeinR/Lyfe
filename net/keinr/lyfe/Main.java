@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.util.Random;
 
 import com.sun.jna.Native;
+import com.sun.jna.Library;
 
 import net.keinr.util.config.Properties;
 import net.keinr.util.config.PropertiesSyntaxException;
@@ -19,9 +20,13 @@ public class Main {
 
     private static final Random random = new Random();
 
+    private interface Stop extends Libaray {
+        void enterRaw();
+    }
+
     public static void main(String[] args) {
 
-        Native.setProtected(true);
+        // Native.setProtected(true);
 
         NativeLib lib = (NativeLib) Native.loadLibrary("getchar2", NativeLib.class);
         System.out.println("Running getch....");
@@ -29,6 +34,7 @@ public class Main {
         // lib.speak();
         System.out.flush();
         System.out.println("Done, "+lib.speak());
+        lib.getch();
 
         try {
             System.setErr(
