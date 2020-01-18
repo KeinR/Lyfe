@@ -8,7 +8,7 @@ class ByteString {
     private final byte[] source;
     private int hashcode;
     ByteString(byte[] source, Option... options) {
-        this.source = source;
+        this.source = source.clone();
         for (Option o : options) {
             switch (o) {
                 case LOWERCASE:
@@ -22,16 +22,30 @@ class ByteString {
             }
         }
     }
+    /*
     byte atIndex(int index) {
         return source[index];
     }
+    boolean indexEquals(int index, int comparison) {
+        assert comparison <= 127 && comparison >= -128 : "Invalid range for comparison";
+        return indexEquals(index, (byte)comparison);
+    }
+    */
+    boolean indexEquals(int index, byte comparison) {
+        return index < source.length && source[index] == comparison;
+    }
+    ByteString sub(int start) {
+        final byte[] result = new byte[source.length-start];
+        System.arraycopy(source, start, result, result.length);
+        return new ByteString(result);
+    }
+    /*
     byte[] getBytes() {
         // Don't share the original copy...
         // Or perhaps do, I dunno' dude
-        final byte[] request = new byte[source.length];
-        System.arraycopy(source, 0, request, 0, source.length);
-        return request;
+        return source.clone();
     }
+    */
     boolean equalTo(ByteString data) {
         if (data.source.length != this.source.length) return false;
         for (int i = 0; i < this.source.length; i++) {
@@ -49,6 +63,11 @@ class ByteString {
     @Override
     public boolean equals(Object obj) {
         return obj.getClass().equals(ByteString.class) && obj.hashCode() == hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new String(source);
     }
 
     enum Option { LOWERCASE }

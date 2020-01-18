@@ -1,3 +1,5 @@
 package net.keinr.lyfe;
 
-class CommEnc
+class CommEnc {
+    
+}
