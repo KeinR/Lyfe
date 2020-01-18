@@ -1,5 +1,7 @@
 package net.keinr.lyfe;
 
+import java.io.IOException;
+
 import static net.keinr.util.Ansi.GREEN;
 import static net.keinr.util.Ansi.YELLOW;
 import static net.keinr.util.Ansi.RESET;
@@ -8,11 +10,11 @@ class Console {
     private static User currentUser;
     private static Dir currentDirectory;
 
-    private static boolean started = false;
+    private static boolean running = false;
 
     static void start(User user) {
-        if (started) Logger.error("Tried to start Console more than once");
-        started = true;
+        if (running) Logger.error("Tried to start Console more than once");
+        running = true;
         currentDirectory = user.getSystem().getHomeDir();
         new Thread(Console::in, "Input").start();
     }
@@ -37,9 +39,15 @@ class Console {
     }
 
     private static void in() {
-        final byte[] buffer = new byte[500]; // I think that 500 bytes is more than necessary for cli input
-        while (true) {
-            // TODO: Read user input
+        try {
+            final byte[] buffer = new byte[500]; // I think that 500 bytes is more than necessary for cli input
+            while (running) {
+                // TODO: Read user input
+                System.in.read(buffer);
+                Program.process(buffer);
+            }
+        } catch (IOException e) {
+            Logger.error("Input reader experienced a critical error", e);
         }
     }
 }

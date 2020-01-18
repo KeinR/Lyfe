@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
 source .conf
-java -cp $CLASSPATH -Djna.library.path="/resources/native/source" --module-path $PATH_TO_FX --add-modules $FXMODS net.keinr.lyfe.Main
+# java -cp $CLASSPATH -Djna.library.path="/resources/native/source" --module-path $PATH_TO_FX --add-modules $FXMODS net.keinr.lyfe.Main
+java -cp $CLASSPATH --module-path $PATH_TO_FX --add-modules $FXMODS net.keinr.lyfe.Main
