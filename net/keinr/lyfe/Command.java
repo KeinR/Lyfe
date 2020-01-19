@@ -12,84 +12,93 @@ class Command {
 
     private final Map<ByteString, ByteString> switches = new HashMap<ByteString, ByteString>();
     private final Map<ByteString, ByteString> params = new HashMap<ByteString, ByteString>();
+    private final boolean takeParam;
     private final ByteString[] startPromtAliases;
-
+    private final Executable func;
     private final String usage;
-    
-    Command(String... aliases, String usage) {
-        this.startPromtAliases = new ByteString[aliases.length];
+
+    Command(Executable func, boolean takeParam, String usage, String name, String... aliases) {
+        this.func = func;
+        this.takeParam = takeParam;
+        this.startPromtAliases = new ByteString[aliases.length+1];
         for (int i = 0; i < aliases.length; i++) {
-            this.startPromtAliases[i] = new ByteString(aliases.getBytes());
+            this.startPromtAliases[i] = new ByteString(aliases[i].getBytes());
         }
+        this.startPromtAliases[aliases.length] = new ByteString(name.getBytes());
         this.usage = usage;
     }
 
     void addSwitch(String sw, String... aliases) {
-        final ByteString start = new ByteString(a.getBytes());
-        switches.add(new Param(start, start));
-        for (String al : a) {
-            switches.add(new ByteString(a.getBytes()));
+        final ByteString ref = new ByteString(sw.getBytes());
+        switches.put(ref, ref);
+        for (String al : aliases) {
+            switches.put(new ByteString(al.getBytes()), ref);
         }
     }
 
     void addParam(String sw, String... aliases) {
-        final ByteString start = new ByteString(a.getBytes());
-        params.add(new Param(start, start));
-        for (String al : a) {
-            params.add(new ByteString(a.getBytes()));
+        final ByteString ref = new ByteString(sw.getBytes());
+        params.put(ref, ref);
+        for (String al : aliases) {
+            params.put(new ByteString(al.getBytes()), ref);
         }
     }
 
-    boolean tryExecute(ByteString[] tokens) {
-        if (!tokens[0].equalTo(startPromt)) return false;
-        String param;
+    boolean tryExecute(Token[] tokens) {
+        boolean eq = false;
+        for (ByteString a : startPromtAliases) {
+            if (tokens[0].get().equalTo(a)) {
+                eq = true;
+                break;
+            }
+        }
+        if (!eq) return false;
+        String param = null;
         final Map<String, String> pams = new HashMap<String, String>();
         final Set<String> sws = new HashSet<String>();
         for (int i = 1; i < tokens.length; i++) {
-            final ByteString t = tokens[i];
-            if (t.indexEquals(0, DASH)) {
+            final Token t = tokens[i];
+            if (t.isFlag()) {
                 ByteString target;
-                if (t.indexEquals(1, DASH)) {
-                    if ((target = params.get(t.sub(2))) != null) {
-                        pams.add(target.toString());
-                    }
+                if ((target = switches.get(t.get())) != null) {
+                    sws.add(target.toString());
                 } else {
-                    if ((target = switches.get(t.sub(1))) != null) {
-                        sws.add(target.toString());
-                    }
+                    Logger.warn("Invalid parameter \""+t+"\"");
+                    System.out.println("Incorrect command usage: ");
+                    printUsage();
+                    break;
                 }
-            } else if (param != null) {
+            } else if (t.isParam()) {
+                ByteString target;
+                if ((target = switches.get(t.get())) != null) {
+                    pams.put(target.toString(), tokens[++i].get().toString());
+                } else {
+                    Logger.warn("Invalid parameter \""+t+"\"");
+                    System.out.println("Incorrect command usage: ");
+                    printUsage();
+                    break;
+                }
+            } else if (param != null || !takeParam) {
                 Logger.warn("Switches must be prefixed with a '-', and parameters with '--'");
                 System.out.println("Incorrect command usage: ");
                 printUsage();
+                break;
             } else {
                 param = t.toString();
             }
         }
-        return false; // TEMp
+        func.execute(sws, pams, param);
+        return true; // TEMp
     }
 
+    private void printUsage() {
+        printUsage(0);
+    }
     private void printUsage(int offset) {
         System.out.println(" ".repeat(offset)+usage);
     }
 
-    private interface Executable {
-        void execute(Map<String, String> switchParamMap, Set<String> switchMap, String parameter);
-    }
-
-    private class Param {
-        private final ByteString name, controller;
-        private Param(ByteString name, ByteString controller) {
-            this.name = name;
-            this.controller = controller;
-        }
-        @Override
-        public boolean equals(Object obj) {
-            return name.equals(obj);
-        }
-        @Override
-        public int hashCode() {
-            return name.hashCode();
-        }
+    interface Executable {
+        void execute(Set<String> switches, Map<String, String> params, String parameter);
     }
 }

@@ -9,11 +9,13 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 
 import net.keinr.util.serial.ByteStreamWriter;
+import net.keinr.util.serial.StringReader;
 
 public class Compiler {
 
     private ByteStreamWriter stream;
-    private String source;
+    private StringReader reader;
+    private int i;
 
     private final Path manifestPath;
     private final Path homeDir;
@@ -30,12 +32,18 @@ public class Compiler {
                 build.append(Files.readString(homeDir.resolve(file)));
             }
         }
-        source = build.toString();
         stream = new ByteStreamWriter();
+        reader = new StringReader(build.toString());
+        i = 0;
         return doParse();
     }
 
     private byte[] doParse() {
+
+        while (reader.move()) {
+            
+        }
+
         return new byte[0];
     }
 }

@@ -2,5 +2,5 @@
 @namespace start
 
 {opening
-Hey, you there?${wait(5)}
+Hello?${wait 5}
 }

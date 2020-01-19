@@ -7,9 +7,8 @@ import java.util.Arrays;
 class ByteString {
     private final byte[] source;
     private int hashcode;
-    ByteString(byte[] source, Option... options) {
-        this.source = source.clone();
-        for (Option o : options) {
+    ByteString(byte[] source, Options... options) {
+        for (Options o : options) {
             switch (o) {
                 case LOWERCASE:
                     for (int i = 0; i < source.length; i++) {
@@ -18,34 +17,20 @@ class ByteString {
                         }
                     }
                     break;
-                default: throw new IllegalArgumentException("Invalid switch \""+o+"\"");
+                default: throw new IllegalArgumentException("Invalid option \""+o+"\"");
             }
         }
+        this.source = source.clone();
     }
-    /*
-    byte atIndex(int index) {
+    byte at(int index) {
         return source[index];
     }
-    boolean indexEquals(int index, int comparison) {
-        assert comparison <= 127 && comparison >= -128 : "Invalid range for comparison";
-        return indexEquals(index, (byte)comparison);
+    int length() {
+        return source.length;
     }
-    */
     boolean indexEquals(int index, byte comparison) {
         return index < source.length && source[index] == comparison;
     }
-    ByteString sub(int start) {
-        final byte[] result = new byte[source.length-start];
-        System.arraycopy(source, start, result, result.length);
-        return new ByteString(result);
-    }
-    /*
-    byte[] getBytes() {
-        // Don't share the original copy...
-        // Or perhaps do, I dunno' dude
-        return source.clone();
-    }
-    */
     boolean equalTo(ByteString data) {
         if (data.source.length != this.source.length) return false;
         for (int i = 0; i < this.source.length; i++) {
@@ -70,5 +55,5 @@ class ByteString {
         return new String(source);
     }
 
-    enum Option { LOWERCASE }
+    enum Options { LOWERCASE }
 }
